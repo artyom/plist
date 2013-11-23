@@ -7,6 +7,7 @@ package plist
 import (
 	"reflect"
 	"testing"
+	"time"
 )
 
 var thePlist = `<plist version="1.0">
@@ -21,6 +22,8 @@ var thePlist = `<plist version="1.0">
         <string>/Users/rsc</string>
         <key>LocalMountPoint</key>
         <string>/Users</string>
+	<key>CreatedAt</key>
+	<date>2013-05-13T14:02:10Z</date>
         <key>IgnoredRelativePaths</key>
         <array>
             <string>/.Trash</string>
@@ -68,6 +71,7 @@ var plistTests = []struct {
 			ComputerUUID:    "E7859547-BB9C-41C0-871E-858A0526BAE7",
 			LocalPath:       "/Users/rsc",
 			LocalMountPoint: "/Users",
+			CreatedAt:       time.Date(2013, time.May, 13, 14, 2, 10, 0, time.UTC),
 			IgnoredRelativePaths: []string{
 				"/.Trash",
 				"/go/pkg",
@@ -96,6 +100,7 @@ var plistTests = []struct {
 			ComputerUUID:    "E7859547-BB9C-41C0-871E-858A0526BAE7",
 			LocalPath:       "/Users/rsc",
 			LocalMountPoint: "/Users",
+			CreatedAt:       time.Date(2013, time.May, 13, 14, 2, 10, 0, time.UTC),
 			IgnoredRelativePaths: []string{
 				"/.Trash",
 				"/go/pkg",
@@ -120,6 +125,7 @@ type MyStruct struct {
 	ComputerUUID         string
 	LocalPath            string
 	LocalMountPoint      string
+	CreatedAt            time.Time
 	IgnoredRelativePaths []string
 	Excludes             Exclude1
 	Enabled              bool

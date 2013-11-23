@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"time"
 )
 
 func next(data []byte) (skip, tag, rest []byte) {
@@ -161,6 +162,24 @@ func unmarshalValue(data []byte, v reflect.Value) (rest []byte, err error) {
 			return nil, fmt.Errorf("non-integer in <integer> tag: %s", body)
 		}
 		v.SetInt(int64(i))
+		return data, nil
+
+	case "<date>":
+		if v.Kind() != reflect.Struct {
+			return nil, fmt.Errorf("cannot unmarshal <date> into non-struct %s", v.Type())
+		}
+		body, etag, data := next(data)
+		if len(etag) == 0 {
+			return nil, fmt.Errorf("eof inside <date>")
+		}
+		if string(etag) != "</date>" {
+			return nil, fmt.Errorf("expected </date> but got %s", etag)
+		}
+		d, err := time.Parse(`2006-01-02T15:04:05Z`, string(body))
+		if err != nil {
+			return nil, fmt.Errorf("invalid date in <date> tag: %s", body)
+		}
+		v.Set(reflect.ValueOf(d))
 		return data, nil
 
 	case "<true/>", "<false/>":
