@@ -170,6 +170,24 @@ func unmarshalValue(data []byte, v reflect.Value) (rest []byte, err error) {
 		v.SetInt(int64(i))
 		return data, nil
 
+	case "<real>":
+		if v.Kind() != reflect.Float64 {
+			return nil, fmt.Errorf("cannot unmarshal <real> into non-float64 %s", v.Type())
+		}
+		body, etag, data := next(data)
+		if len(etag) == 0 {
+			return nil, fmt.Errorf("eof inside <real>")
+		}
+		if string(etag) != "</real>" {
+			return nil, fmt.Errorf("expected </real> but got %s", etag)
+		}
+		i, err := strconv.ParseFloat(string(body), 64)
+		if err != nil {
+			return nil, fmt.Errorf("non-float64 in <real> tag: %s", body)
+		}
+		v.SetFloat(i)
+		return data, nil
+
 	case "<date>":
 		if v.Kind() != reflect.Struct {
 			return nil, fmt.Errorf("cannot unmarshal <date> into non-struct %s", v.Type())
