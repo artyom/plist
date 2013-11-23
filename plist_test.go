@@ -24,6 +24,8 @@ var thePlist = `<plist version="1.0">
         <string>/Users</string>
 	<key>CreatedAt</key>
 	<date>2013-05-13T14:02:10Z</date>
+	<key>Tags</key>
+	<array/>
         <key>IgnoredRelativePaths</key>
         <array>
             <string>/.Trash</string>
@@ -72,6 +74,7 @@ var plistTests = []struct {
 			LocalPath:       "/Users/rsc",
 			LocalMountPoint: "/Users",
 			CreatedAt:       time.Date(2013, time.May, 13, 14, 2, 10, 0, time.UTC),
+			Tags:            nil,
 			IgnoredRelativePaths: []string{
 				"/.Trash",
 				"/go/pkg",
@@ -101,6 +104,7 @@ var plistTests = []struct {
 			LocalPath:       "/Users/rsc",
 			LocalMountPoint: "/Users",
 			CreatedAt:       time.Date(2013, time.May, 13, 14, 2, 10, 0, time.UTC),
+			Tags:            nil,
 			IgnoredRelativePaths: []string{
 				"/.Trash",
 				"/go/pkg",
@@ -126,6 +130,7 @@ type MyStruct struct {
 	LocalPath            string
 	LocalMountPoint      string
 	CreatedAt            time.Time
+	Tags                 []string
 	IgnoredRelativePaths []string
 	Excludes             Exclude1
 	Enabled              bool

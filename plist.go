@@ -109,6 +109,12 @@ func unmarshalValue(data []byte, v reflect.Value) (rest []byte, err error) {
 		}
 		return data, nil
 
+	case "<array/>":
+		if v.Kind() != reflect.Slice {
+			return nil, fmt.Errorf("cannot unmarshal <array> into non-slice %s", v.Type())
+		}
+		return data, nil
+
 	case "<array>":
 		t := v.Type()
 		if v.Kind() != reflect.Slice {
